@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const userRoute = require("./src/routes/user.route");
 const roomRoute = require("./src/routes/room.route");
+const authUser = require('./src/middlewares/authentication');
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
     "Origin, X-Requested-With, Content, Accept, Authorization"
   );
   if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
     return res.status(200).json({});
   }
   next();

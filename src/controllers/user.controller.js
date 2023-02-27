@@ -1,41 +1,65 @@
 const Rooms = require("../models/room.model");
 const userRoute = require("../models/user.model")
+const express = require("express");
+const mongoose = require("mongoose");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
-class Controller {
-  // create a new Room
-  async createUser(roomType) {
-    try {
-      const room = new Room({
-        ...roomType,
-      });
-      return await room.save();
-    } catch (err) {
-      if (err.message.indexOf("duplicate key error") !== -1) {
-        err.message = "Room codeName Assigned, Assign new codeName to Room ...";
-      }
-      throw err;
-    }
-  }
-
-  // edit a room
-  async editUserById(id, roomType) {
-    return await Rooms.findOneAndUpdate({ _id: id }, roomType);
-  }
-
-  // delete a room
-  async deleteUserById(id) {
-    return await Rooms.findOneAndDelete({ _id: id });
-  }
-
-  // fetch a single room
-  async fetchSingleRoomById(id) {
-    return await Rooms.findOne({ _id: id });
-  }
-
-  // fetch all created room
-  async fetchAllRooms() {
-    return await Rooms.find({}, "-__v");
-  }
+exports.createUser =  (req, res, next) => {
+    User.find({email: req.body.email}).exec()
+    .then(user => {
+        if(user.length >= 1){
+            return res.status(409).json({
+                message: "Email already exists"
+            })
+        } else {
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+                if (err) {
+                return res.status(500).json({
+                    error: err,
+                });
+                } else {
+                const user = new User({
+                    _id: new mongoose.Types.ObjectId(),
+                    email: req.body.email,
+                    password: hash,
+                });
+                user
+                    .save()
+                    .then((result) => {
+                    console.log(result);
+                    res.status(201).json({
+                        message: "User Created",
+                    });
+                    })
+                    .catch((err) => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err,
+                    });
+                    });
+                }
+            });
+        }
+    })
 }
 
-module.exports = new Controller();
+exports.deleteUserById = (req, res, next) => {
+        User.remove({
+        _id: req.params.userId,
+        })
+        .exec()
+        .then((result) => {
+            console.log(result);
+            res.status(200).json({
+            message: "User deleted successfully",
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+            error: err,
+            });
+        });
+    
+}
