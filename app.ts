@@ -1,13 +1,13 @@
-const express = require("express");
-const app = express();
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+import express, { Errback, NextFunction, Request, Response } from "express";
+import app from express();
+import morgan from "morgan"
+import bodyParser from "body-parser";
+import mongoose, { Error }  from "mongoose";
+import dotenv from "dotenv";
 dotenv.config();
-const userRoute = require("./src/routes/user.route");
-const roomRoute = require("./src/routes/room.route");
-const authUser = require('./src/middlewares/authentication');
+import userRoute from "./src/routes/user.route";
+import roomRoute from "./src/routes/room.route";
+import authUser from './src/middlewares/authentication';
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,7 +23,7 @@ mongoose
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -40,14 +40,14 @@ app.use((req, res, next) => {
 app.use("/users", userRoute);
 app.use("/rooms", roomRoute);
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new Error("Not Found");
   error.status = 404;
   next(error);
 });
 
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.statusCode || 500);
   res.json({
     error: {
       message: error.message,

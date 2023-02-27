@@ -1,5 +1,4 @@
-const { model, Schema, Types } = require("mongoose");
-const constants = require("../constants/constants");
+import { model, Schema, Types } from "mongoose"
 
 const ObjectId = Types.ObjectId;
 
@@ -15,7 +14,7 @@ const room_Schema = new Schema(
       required: true,
     },
     roomType: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       enum: ["Suites", "Presidential Suites", "Deluxe", "Twin Room"],
     },
@@ -25,4 +24,4 @@ const room_Schema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Room', room_Schema)
+export default model('Room', room_Schema)

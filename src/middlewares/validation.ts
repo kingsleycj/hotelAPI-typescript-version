@@ -1,4 +1,4 @@
-const joi = require("joi");
+import joi from "joi"
 
 const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
@@ -18,4 +18,6 @@ const loginSchema = joi.object({
   guestCheck: joi.boolean().truthy("Yes").valid(true).required(), // an admin should also get user/guest permissions
 });
 
-exports.validateSchema = validator(loginSchema);
+const validateSchema = validator(loginSchema)
+
+export default validateSchema;

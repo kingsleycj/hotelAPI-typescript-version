@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const constants = require("../constants/constants");
+import {model, Schema} from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -19,4 +18,4 @@ const userSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('User', userSchema);
+export default model('User', userSchema);

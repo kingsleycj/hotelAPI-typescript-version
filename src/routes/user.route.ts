@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const authUser = require("../middlewares/authentication");
-const { validatorSchema } = require("../middlewares/validator");
-const userController = require("../controllers/user.controller");
+import express from "express"
+import router from express.Router();
+import authUser from "../middlewares/authentication";
+import { validatorSchema } from "../middlewares/validation";
+import userController from "../controllers/user.controller";
 
 // create a new user**
 router.post("/", validatorSchema, authUser, userController.createUser);
@@ -19,4 +19,4 @@ router.patch("/:id", validatorSchema, authUser, userController.editUserById);
 //  delete user by Id**
 router.delete("/:id", validatorSchema, authUser, userController.deleteUserById);
 
-module.exports = router;
+export default router;

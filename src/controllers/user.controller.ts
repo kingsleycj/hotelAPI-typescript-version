@@ -1,11 +1,11 @@
-const Rooms = require("../models/room.model");
-const userRoute = require("../models/user.model");
-const express = require("express");
-const mongoose = require("mongoose");
-const User = require("../models/user");
-const bcrypt = require("bcrypt");
 
-exports.createUser = (req, res, next) => {
+import userRoute from "../models/user.model"
+import express from "express"
+import mongoose from "mongoose"
+import User from "../models/user.model"
+import bcrypt from "bcrypt"
+
+const createUser = (req: Request, res: Response, next: NextFunction) => {
   User.find({ email: req.body.email })
     .exec()
     .then((user) => {
@@ -45,7 +45,7 @@ exports.createUser = (req, res, next) => {
     });
 };
 
-exports.editUserById = (req, res, next) => {
+const editUserById = (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.roomId;
   const updateOps = {};
   for (const ops of req.body) {
@@ -65,7 +65,11 @@ exports.editUserById = (req, res, next) => {
     });
 };
 
-exports.fetchSingleUserById = (req, res, next) => {
+const fetchSingleUserById = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   User.findById(id)
     .exec()
     .then((doc) => {
@@ -90,7 +94,7 @@ exports.fetchSingleUserById = (req, res, next) => {
     });
 };
 
-exports.fetchAllUsers = (req, res, next) => {
+const fetchAllUsers = (req: Request, res: Response, next: NextFunction) => {
   User.find()
     .select("name role _id ")
     .exec()
@@ -113,7 +117,7 @@ exports.fetchAllUsers = (req, res, next) => {
     });
 };
 
-exports.deleteUserById = (req, res, next) => {
+const deleteUserById = (req: Request, res: Response, next: NextFunction) => {
   User.remove({
     _id: req.params.userId,
   })
@@ -130,4 +134,12 @@ exports.deleteUserById = (req, res, next) => {
         error: err,
       });
     });
+};
+
+export default {
+  createUser,
+  deleteUserById,
+  fetchAllUsers,
+  editUserById,
+  fetchSingleUserById,
 };

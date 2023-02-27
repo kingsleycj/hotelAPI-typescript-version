@@ -1,8 +1,8 @@
-const Rooms = require("../models/room.model");
-const mongoose = require("mongoose");
+import Room from "../models/room.model"
+import mongoose from "mongoose"
 
 
-exports.createSingleRoom = (req, res, next) => {
+const createSingleRoom = (req: Request, res: Response, next: NextFunction) => {
     const room = new Room({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -29,7 +29,7 @@ exports.createSingleRoom = (req, res, next) => {
     });
 }
 
-exports.fetchAllRooms = (req, res, next) => {
+const fetchAllRooms = (req: Request, res: Response, next: NextFunction) => {
   Room.find()
     .select("name price _id roomType")
     .exec()
@@ -53,7 +53,7 @@ exports.fetchAllRooms = (req, res, next) => {
     });
 };
 
-exports.fetchSingleRoomById = (req, res, next) => {
+const fetchSingleRoomById =(req: Request, res: Response, next: NextFunction) => {
 const id = req.params.productId;
 Room.findById(id)
   .exec()
@@ -77,7 +77,7 @@ Room.findById(id)
   });
 };
 
-exports.editRoomById = (req, res, next) => {
+const editRoomById = (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.roomId;
     const updateOps = {};
     for (const ops of req.body) {
@@ -97,7 +97,7 @@ exports.editRoomById = (req, res, next) => {
       });
 };
 
-exports.deleteSingleRoomById = (req, res, next) => {
+const deleteSingleRoomById = (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.productId;
     Room.remove({_id : id })
     .exec()
@@ -113,3 +113,11 @@ exports.deleteSingleRoomById = (req, res, next) => {
         })
     });
 }
+
+export default {
+  deleteSingleRoomById,
+  createSingleRoom,
+  editRoomById,
+  fetchSingleRoomById,
+  fetchAllRooms
+};
