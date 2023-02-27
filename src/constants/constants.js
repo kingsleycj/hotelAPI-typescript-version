@@ -12,6 +12,7 @@ const constants = {
     DELETE: "Room deleted successfully",
     UPDATE: "Room data updated successfully",
   },
+
 };
 
-module.exports = { constants };
+module.exports = constants ;

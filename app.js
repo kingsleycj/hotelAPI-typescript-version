@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
-const productRoutes = require("./src/routes/products");
-const orderRoutes = require("./src/routes/orders");
+const userRoute = require("./src/routes/user.route");
+const roomRoute = require("./src/routes/room.route");
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,8 +36,8 @@ app.use((req, res, next) => {
 });
 
 // Routes that should handle requests
-app.use("/products", productRoutes);
-app.use("/orders", orderRoutes);
+app.use("/users", userRoute);
+app.use("/rooms", roomRoute);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");
@@ -53,4 +53,5 @@ app.use((error, req, res, next) => {
     },
   });
 });
+
 module.exports = app;
